@@ -130,7 +130,10 @@ function fox_roots_theme_setup() {
 	);
 
 	/* Handle content width for embeds and images. */
-	hybrid_set_content_width( 1280 );
+	hybrid_set_content_width( 1300 );
+	
+	/* Enqueue styles and scripts. */
+	add_action( 'wp_enqueue_scripts', 'fox_roots_enqueue_scripts' );
 	
 	/* Register custom nav menus. */
 	add_action( 'init', 'fox_roots_register_nav_menus', 11 );
@@ -141,6 +144,24 @@ function fox_roots_theme_setup() {
 	/* Add number of subsidiary and front page widgets to body_class. */
 	add_filter( 'body_class', 'fox_roots_subsidiary_classes' );
 	add_filter( 'body_class', 'fox_roots_front_page_classes' );
+	
+	/* Add menu-item-parent class to parent menu items.  */
+	add_filter( 'wp_nav_menu_objects', 'fox_roots_add_menu_parent_class' );
+
+}
+
+/**
+ * Enqueue styles and scripts
+ *
+ * @since 1.0
+ */
+function fox_roots_enqueue_scripts() {
+
+	/* Enqueue responsive nav. */
+	wp_enqueue_script( 'fox-roots-responsive-nav', trailingslashit( get_template_directory_uri() ) . 'js/responsive-nav/responsive-nav.min.js', array(), '20131101', true );
+	
+	/* Enqueue settings. */
+	wp_enqueue_script( 'fox-roots-settings', trailingslashit( get_template_directory_uri() ) . 'js/settings/settings.js', array( 'fox-roots-responsive-nav' ), '20131101', true );
 
 }
 
@@ -228,6 +249,33 @@ function fox_roots_front_page_classes( $classes ) {
     
     return $classes;
 	
+}
+
+/**
+ * Add menu-item-parent class to parent menu items. Thanks to Chip Bennett.
+ *
+ * @since 0.1.0
+ */
+function fox_roots_add_menu_parent_class( $items ) {
+
+	$parents = array();
+
+	foreach ( $items as $item ) {
+
+		if ( $item->menu_item_parent && $item->menu_item_parent > 0 )
+			$parents[] = $item->menu_item_parent;
+		
+	}
+
+	foreach ( $items as $item ) {
+
+		if ( in_array( $item->ID, $parents ) )
+			$item->classes[] = 'menu-item-parent';
+
+	}
+
+	return $items;    
+
 }
 
 ?>

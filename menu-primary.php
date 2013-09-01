@@ -4,7 +4,6 @@
 	
 		<div class="wrap">
 		
-			<h3 class="menu-toggle" title="<?php esc_attr_e( 'Navigation', 'fox-roots' ); ?>"><?php _e( 'Navigation', 'fox-roots' ); ?></h3>
 			<div class="screen-reader-text skip-link"><a href="#content" title="<?php esc_attr_e( 'Skip to content', 'fox-roots' ); ?>"><?php _e( 'Skip to content', 'fox-roots' ); ?></a></div>
 	
 			<?php
